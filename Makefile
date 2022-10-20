@@ -1,6 +1,6 @@
 .PHONY: build clean
 
-BINARY="aqmp-pipeline"
+BINARY="amqp-pipeline"
 
 .PHONY: build
 build:
