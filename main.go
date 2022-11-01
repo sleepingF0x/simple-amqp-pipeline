@@ -23,6 +23,7 @@ func init() {
 func main() {
 	if *showVer {
 		log.Println("version: ", version.Full())
+		os.Exit(0)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -48,9 +49,14 @@ func main() {
 		}
 		pipe, err := pipeline.NewPipeline(conf.SrcConf, conf.DstConf, conf.Workers)
 		if err != nil {
-			log.Println("create new pipeline failed")
+			log.Printf("create new pipeline producer [%v] failed\n", conf.DstConf.Uri)
+			os.Exit(-1)
 		} else {
-			pipe.Start()
+			err := pipe.Start()
+			if err != nil {
+				log.Printf("create new pipeline consumer [%v] failed\n", conf.SrcConf.Uri)
+				os.Exit(-1)
+			}
 		}
 	}
 	<-ctx.Done()

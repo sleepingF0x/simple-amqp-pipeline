@@ -15,7 +15,7 @@ type Pipeline struct {
 func NewPipeline(srcConf config.RabbitMQConf, destConf config.RabbitMQConf, workers int) (*Pipeline, error) {
 	c := &Pipeline{}
 	src := amqp.NewConsumer(
-		destConf.Uri,
+		srcConf.Uri,
 		srcConf.Exchange.ExchangeName,
 		srcConf.Exchange.ExchangeType,
 		srcConf.Queue.QueueName,
@@ -40,8 +40,8 @@ func (p *Pipeline) move(msg []byte) error {
 	return nil
 }
 
-func (p *Pipeline) Start() {
-	p.src.Start()
+func (p *Pipeline) Start() error {
+	return p.src.Start()
 }
 
 func (p *Pipeline) Stop() {
